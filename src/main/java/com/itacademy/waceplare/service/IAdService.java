@@ -7,7 +7,7 @@ import java.util.List;
 public interface IAdService {
     List<Ad> getAll();
 
-    Ad getOne(String name);
+    List<Ad> getAllByTitle(String name);
 
     void add(Ad ad);
 

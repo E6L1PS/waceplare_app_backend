@@ -1,7 +1,7 @@
 package com.itacademy.waceplare.controller;
 
-import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.service.IAdService;
+import com.itacademy.waceplare.model.User;
+import com.itacademy.waceplare.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,15 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ads")
-public class AdController {
+@RequestMapping("/user")
+public class UserController {
 
     @Autowired
-    private IAdService adService;
+    private IUserService userService;
+
 
     @GetMapping("/all")
-    public List<Ad> getAds() {
-        return adService.getAll();
+    private List<User> getUsers() {
+        return userService.getAll();
     }
 
+    
 }

@@ -19,12 +19,12 @@ public class AdService implements IAdService {
 
     @Override
     public List<Ad> getAll() {
-        return adRepository.findAll();
+        return adRepository.findByStatusTrue();
     }
 
     @Override
-    public Ad getOne(String name) {
-        return adRepository.findByName(name);
+    public List<Ad> getAllByTitle(String title) {
+        return adRepository.findByStatusTrueAndTitle(title);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.itacademy.waceplare.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,23 +26,34 @@ public class Ad {
 
     private Integer views;
 
-    private String name;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad")
-    private List<Comment> comments;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad")
-    private List<Image> images;
-
-    private Long previewImageId;
+    private String title;
 
     private String description;
 
+    private Boolean status;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "date_of_created")
     private LocalDate dateOfCreated;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
+    private List<Comment> comments;
 
     @PrePersist
     private void init() {
         dateOfCreated = LocalDate.now();
+        status = true;
     }
+
 
 }
