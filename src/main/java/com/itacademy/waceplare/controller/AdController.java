@@ -1,11 +1,10 @@
 package com.itacademy.waceplare.controller;
 
+import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.service.IAdService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,13 @@ public class AdController {
     public List<Ad> getAds() {
         return adService.getAll();
     }
+
+    @PostMapping("/add")
+    public void addAd(@RequestBody AdDTO adDto) {
+        adService.add(adDto);
+    }
+
+
+
 
 }

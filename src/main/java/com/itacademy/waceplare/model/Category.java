@@ -21,7 +21,11 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ad> advertisements;
 
+    public Category(String category) {
+        this.name = category;
+    }
 }

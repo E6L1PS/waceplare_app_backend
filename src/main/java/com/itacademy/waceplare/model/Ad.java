@@ -36,23 +36,31 @@ public class Ad {
     @Column(name = "date_of_created")
     private LocalDate dateOfCreated;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<Comment> comments;
+
+
+    public Ad(Integer price, String title, String description, Category category, User user) {
+        this.price = price;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.user = user;
+    }
 
     @PrePersist
     private void init() {
         dateOfCreated = LocalDate.now();
         status = true;
+        views = 0;
     }
 
 
