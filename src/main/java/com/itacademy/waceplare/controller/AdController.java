@@ -20,6 +20,12 @@ public class AdController {
         return adService.getAll();
     }
 
+
+    @GetMapping("/title")
+    public List<Ad> getAdsByTitle(@RequestParam("title") String title) {
+        return adService.getAllByTitle(title);
+    }
+
     @PostMapping("/add")
     public void addAd(@RequestBody AdDTO adDto) {
         adService.add(adDto);

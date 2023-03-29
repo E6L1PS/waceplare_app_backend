@@ -3,7 +3,6 @@ package com.itacademy.waceplare.service;
 import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.exception.UserNotFoundException;
 import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.model.Category;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.UserRepository;
