@@ -12,6 +12,7 @@ import java.util.List;
 @Slf4j
 @Transactional(readOnly = true)
 public class UserService implements IUserService {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -22,4 +23,5 @@ public class UserService implements IUserService {
     public List<User> getAll() {
         return userRepository.findAll();
     }
+
 }

@@ -7,7 +7,6 @@ import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +18,13 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AdService implements IAdService {
 
-    @Autowired
-    private AdRepository adRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final AdRepository adRepository;
+    private final UserRepository userRepository;
+
+    public AdService(AdRepository adRepository, UserRepository userRepository) {
+        this.adRepository = adRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public List<Ad> getAll() {
@@ -36,8 +38,8 @@ public class AdService implements IAdService {
 
     @Override
     @Transactional
-    public void add(AdDTO adDTO) {
-        Optional<User> optionalUser = userRepository.findById(adDTO.getUserId());
+    public void add(AdDTO adDTO, String username) {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
@@ -51,7 +53,7 @@ public class AdService implements IAdService {
 
             adRepository.save(ad);
         } else {
-            throw new UserNotFoundException("User with id " + adDTO.getUserId() + " not found");
+            throw new UserNotFoundException("User with id " + optionalUser.get().getId() + " not found");
         }
     }
 
