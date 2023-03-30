@@ -10,7 +10,7 @@ public interface IAdService {
 
     List<Ad> getAllByTitle(String name);
 
-    void add(AdDTO adDTO);
+    void add(AdDTO adDTO, String name);
 
     void delete(Ad ad);
 }

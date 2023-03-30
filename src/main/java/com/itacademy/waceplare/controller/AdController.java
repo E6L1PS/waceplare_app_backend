@@ -3,35 +3,35 @@ package com.itacademy.waceplare.controller;
 import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.service.IAdService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/ads")
+@RequestMapping("/api/v1/ads")
+@RequiredArgsConstructor
 public class AdController {
 
-    @Autowired
-    private IAdService adService;
+    private final IAdService adService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Ad> getAds() {
         return adService.getAll();
     }
-
 
     @GetMapping("/title")
     public List<Ad> getAdsByTitle(@RequestParam("title") String title) {
         return adService.getAllByTitle(title);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public void addAd(@RequestBody AdDTO adDto) {
-        adService.add(adDto);
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        adService.add(adDto, username);
     }
-
-
 
 
 }

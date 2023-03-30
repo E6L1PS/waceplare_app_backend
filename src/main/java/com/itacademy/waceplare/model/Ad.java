@@ -36,7 +36,8 @@ public class Ad {
     @Column(name = "date_of_created")
     private LocalDate dateOfCreated;
 
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -47,6 +48,9 @@ public class Ad {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<Comment> comments;
 
+   /* @JsonIgnore()
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
+    private List<FavoriteAd> favoriteAds;*/
 
     public Ad(Integer price, String title, String description, Category category, User user) {
         this.price = price;
