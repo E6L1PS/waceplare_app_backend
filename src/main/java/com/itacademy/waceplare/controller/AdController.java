@@ -29,8 +29,7 @@ public class AdController {
 
     @PostMapping
     public void addAd(@RequestBody AdDTO adDto) {
-        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        adService.add(adDto, username);
+        adService.add(adDto);
     }
 
 

@@ -6,47 +6,45 @@ import com.itacademy.waceplare.model.FavoriteAd;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.FavoriteAdRepository;
-import com.itacademy.waceplare.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FavoriteAdService implements IFavoriteAdService {
 
     private final FavoriteAdRepository favoriteAdRepository;
-
-    private final UserRepository userRepository;
     private final AdRepository adRepository;
 
 
     @Override
-    public List<Ad> getAll(String username) {
-        Optional<User> optionalUser = userRepository.findByEmail(username);
+    public List<Ad> getAll() {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 
-        return favoriteAdRepository.findAdsByUserId(optionalUser.get().getId());
+        return favoriteAdRepository.findAdsByUserId(userId);
     }
 
     @Override
-    public List<Ad> getAllByTitleAndUserId(String name, Long userId) {
+    public List<Ad> getAllByTitle(String title) {
         return null;
     }
 
-    @Override
-    public List<Ad> getAllByUser(User user) {
-        return null;
-    }
 
     @Override
-    public void addByAdId(Long adId, String username) {
-        Optional<User> optionalUser = userRepository.findByEmail(username);
+    @Transactional
+    public void addByAdId(Long adId) {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Optional<Ad> optionalAd = adRepository.findById(adId);
 
-        if (optionalUser.isPresent() && optionalAd.isPresent()) {
-            User user = optionalUser.get();
+        if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
 
             favoriteAdRepository.save(new FavoriteAd(user, ad));
@@ -57,8 +55,10 @@ public class FavoriteAdService implements IFavoriteAdService {
     }
 
     @Override
-    public void deleteByAdId(Long adId, String username) {
-
+    @Transactional
+    public void deleteByAdId(Long adId) {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        favoriteAdRepository.deleteByUserIdAndByAdId(userId, adId);
     }
 
 }

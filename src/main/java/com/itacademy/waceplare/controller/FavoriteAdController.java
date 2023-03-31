@@ -21,39 +21,22 @@ public class FavoriteAdController {
 
     @GetMapping
     public List<Ad> getAds() {
-        // String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        return favoriteAdService.getAll("danil@mail.ru");
-
-   /*     String email = null;
-        if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails) {
-                email = ((UserDetails) principal).getUsername();
-            }
-        }
-        if (email != null) {
-            return favoriteAdService.getAll(email);
-        } else {
-            throw new UserNotFoundException("User not authorized");
-        }*/
+        return favoriteAdService.getAll();
     }
 
     @GetMapping("/title")
-    public List<Ad> getAdsByTitle(@RequestParam("title") String title, Authentication authentication) {
-        return favoriteAdService.getAll(title);
+    public List<Ad> getAdsByTitle(@RequestParam("title") String title) {
+        return favoriteAdService.getAllByTitle(title);
     }
 
     @PostMapping("{adId}")
     public void addFavoriteAd(@PathVariable Long adId) {
-        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-
-        favoriteAdService.addByAdId(adId, username);
+        favoriteAdService.addByAdId(adId);
     }
 
     @DeleteMapping("{adId}")
     public void deleteFavoriteAd(@PathVariable Long adId) {
-        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        favoriteAdService.deleteByAdId(adId, username);
+        favoriteAdService.deleteByAdId(adId);
     }
 
 }

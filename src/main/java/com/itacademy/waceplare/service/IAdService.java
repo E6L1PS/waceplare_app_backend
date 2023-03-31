@@ -8,9 +8,9 @@ import java.util.List;
 public interface IAdService {
     List<Ad> getAll();
 
-    List<Ad> getAllByTitle(String name);
+    List<Ad> getAllByTitle(String title);
 
-    void add(AdDTO adDTO, String name);
+    void add(AdDTO adDTO);
 
-    void delete(Ad ad);
+    void delete(Long adId);
 }
