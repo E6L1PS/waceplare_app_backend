@@ -7,8 +7,3 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
