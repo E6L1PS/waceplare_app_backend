@@ -20,7 +20,6 @@ import java.util.List;
 public class AdService implements IAdService {
 
     private final AdRepository adRepository;
-    private final UserRepository userRepository;
 
     @Override
     public List<Ad> getAll() {
@@ -33,9 +32,16 @@ public class AdService implements IAdService {
     }
 
     @Override
-    @Transactional
-    public void add(AdDTO adDTO) {
+    public List<Ad> getAdsByUser() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return adRepository.findByUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void postAd(AdDTO adDTO) {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        log.info(user.getId());
         Ad ad = new Ad(
                 adDTO.getPrice(),
                 adDTO.getTitle(),
@@ -49,7 +55,7 @@ public class AdService implements IAdService {
 
     @Override
     @Transactional
-    public void delete(Long adId) {
+    public void deleteByAdId(Long adId) {
      /*   log.info("saving new ad {}", ad);
         adRepository.delete(ad);*/
     }

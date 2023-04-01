@@ -10,7 +10,10 @@ public interface IAdService {
 
     List<Ad> getAllByTitle(String title);
 
-    void add(AdDTO adDTO);
+    List<Ad> getAdsByUser();
 
-    void delete(Long adId);
+    void postAd(AdDTO adDTO);
+
+    void deleteByAdId(Long adId);
+
 }

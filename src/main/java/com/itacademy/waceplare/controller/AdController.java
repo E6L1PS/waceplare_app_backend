@@ -4,6 +4,7 @@ import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.service.IAdService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class AdController {
 
     private final IAdService adService;
 
+
     @GetMapping
     public List<Ad> getAds() {
         return adService.getAll();
@@ -25,9 +27,16 @@ public class AdController {
         return adService.getAllByTitle(title);
     }
 
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @GetMapping("/my")
+    public List<Ad> getAdsByUser() {
+        return adService.getAdsByUser();
+    }
+
+    @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
-    public void addAd(@RequestBody AdDTO adDto) {
-        adService.add(adDto);
+    public void postAd(@RequestBody AdDTO adDto) {
+        adService.postAd(adDto);
     }
 
 
