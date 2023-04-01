@@ -4,9 +4,6 @@ import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.security.JwtService;
 import com.itacademy.waceplare.service.IFavoriteAdService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +14,6 @@ import java.util.List;
 public class FavoriteAdController {
 
     private final IFavoriteAdService favoriteAdService;
-    private final JwtService jwtService;
 
     @GetMapping
     public List<Ad> getAds() {
