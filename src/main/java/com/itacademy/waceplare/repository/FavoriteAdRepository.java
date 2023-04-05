@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 public interface FavoriteAdRepository extends JpaRepository<FavoriteAd, Long> {
 
-    @Query("SELECT fa.ad FROM FavoriteAd fa WHERE fa.user.id = :id")
-    List<Ad> findAdsByUserId(Long id);
+    @Query("SELECT fa.ad FROM FavoriteAd fa WHERE fa.user.id = :userId")
+    List<Ad> findAdsByUserId(Long userId);
 
     @Modifying
     @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.id = :adId")

@@ -4,7 +4,6 @@ import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
-import com.itacademy.waceplare.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,9 +54,23 @@ public class AdService implements IAdService {
 
     @Override
     @Transactional
-    public void deleteByAdId(Long adId) {
-     /*   log.info("saving new ad {}", ad);
-        adRepository.delete(ad);*/
+    public void deleteAd(Long adId) {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        adRepository.deleteAdByUserId(adId, userId);
+    }
+
+    @Override
+    @Transactional
+    public void hideAd(Long adId) {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        adRepository.updateAdStatusByUser(adId,userId, false);
+    }
+
+    @Override
+    @Transactional
+    public void showAd(Long adId) {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        adRepository.updateAdStatusByUser(adId,userId, true);
     }
 
 }

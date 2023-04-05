@@ -14,6 +14,9 @@ public interface IAdService {
 
     void postAd(AdDTO adDTO);
 
-    void deleteByAdId(Long adId);
+    void deleteAd(Long adId);
 
+    void hideAd(Long adId);
+
+    void showAd(Long adId);
 }

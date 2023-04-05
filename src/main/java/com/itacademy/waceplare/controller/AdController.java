@@ -39,5 +39,22 @@ public class AdController {
         adService.postAd(adDto);
     }
 
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @DeleteMapping("/{adId}")
+    public void deleteAd(@PathVariable Long adId) {
+        adService.deleteAd(adId);
+    }
+
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @PutMapping("/my/{adId}/hide")
+    public void hideAd (@PathVariable Long adId) {
+        adService.hideAd(adId);
+    }
+
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @PutMapping("/my/{adId}/show")
+    public void showAd (@PathVariable Long adId) {
+        adService.showAd(adId);
+    }
 
 }
