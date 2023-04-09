@@ -19,4 +19,6 @@ public interface IAdService {
     void hideAd(Long adId);
 
     void showAd(Long adId);
+
+    Ad getAdById(Long adId);
 }

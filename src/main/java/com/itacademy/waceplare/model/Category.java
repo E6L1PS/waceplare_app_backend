@@ -1,3 +1,4 @@
+/*
 package com.itacademy.waceplare.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,9 +19,13 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private TypeAd type;
+
+    @Enumerated(EnumType.STRING)
+    private StateAd state;
     @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ad> advertisements;
@@ -29,3 +34,4 @@ public class Category {
         this.name = category;
     }
 }
+*/

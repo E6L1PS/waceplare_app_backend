@@ -33,6 +33,11 @@ public class AdController {
         return adService.getAdsByUser();
     }
 
+    @GetMapping("/{adId}")
+    public Ad getAdById(@PathVariable Long adId) {
+        return adService.getAdById(adId);
+    }
+
     @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
     public void postAd(@RequestBody AdDTO adDto) {

@@ -22,6 +22,10 @@ public interface AdRepository extends JpaRepository<Ad, Long> {
     List<Ad> findByStatusTrueAndTitle(String title);
 
     @Modifying
+    @Query("UPDATE Ad a SET a.views = a.views + 1 WHERE a.id = :adId")
+    void incrementViewCount(Long adId);
+
+    @Modifying
     @Query("UPDATE Ad a SET a.status = :status WHERE a.user.id = :userId AND a.id = :adId")
     void updateAdStatusByUser(Long adId, Long userId, Boolean status);
 

@@ -41,22 +41,25 @@ public class Ad {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @Enumerated(EnumType.STRING)
+    private TypeAd type;
+
+    @Enumerated(EnumType.STRING)
+    private StateAd state;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<Comment> comments;
 
-   /* @JsonIgnore()
+    @JsonIgnore()
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
-    private List<FavoriteAd> favoriteAds;*/
+    private List<FavoriteAd> favoriteAds;
 
-    public Ad(Integer price, String title, String description, Category category, User user) {
+    public Ad(Integer price, String title, String description, TypeAd type, StateAd state, User user) {
         this.price = price;
         this.title = title;
         this.description = description;
-        this.category = category;
+        this.type = type;
+        this.state = state;
         this.user = user;
     }
 
