@@ -24,7 +24,6 @@ public class FavoriteAdService implements IFavoriteAdService {
     private final FavoriteAdRepository favoriteAdRepository;
     private final AdRepository adRepository;
 
-
     @Override
     public List<Ad> getAll() {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -33,10 +32,16 @@ public class FavoriteAdService implements IFavoriteAdService {
     }
 
     @Override
+    public List<Long> getAdsId() {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+
+        return favoriteAdRepository.findAdsIdByUserId(userId);
+    }
+
+    @Override
     public List<Ad> getAllByTitle(String title) {
         return null;
     }
-
 
     @Override
     @Transactional

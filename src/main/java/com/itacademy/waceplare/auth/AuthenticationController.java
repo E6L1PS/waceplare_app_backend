@@ -1,11 +1,8 @@
 package com.itacademy.waceplare.auth;
 
-import com.itacademy.waceplare.model.User;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

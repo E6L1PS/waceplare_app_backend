@@ -7,3 +7,5 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+upload:
+  path: E:/images/

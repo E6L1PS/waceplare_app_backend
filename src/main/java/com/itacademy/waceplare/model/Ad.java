@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +29,7 @@ public class Ad {
 
     private String title;
 
+    @Column(length = 3000)
     private String description;
 
     private Boolean status;
@@ -53,6 +55,13 @@ public class Ad {
     @JsonIgnore()
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<FavoriteAd> favoriteAds;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
+    private List<AdImage> images;
+/*
+    @Transient
+    private List<MultipartFile> images;*/
 
     public Ad(Integer price, String title, String description, TypeAd type, StateAd state, User user) {
         this.price = price;

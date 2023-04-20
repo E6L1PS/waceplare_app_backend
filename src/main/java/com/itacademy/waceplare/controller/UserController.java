@@ -1,8 +1,10 @@
 package com.itacademy.waceplare.controller;
 
+import com.itacademy.waceplare.dto.UserInfo;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +24,10 @@ public class UserController {
         return userService.getAll();
     }
 
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @GetMapping
+    private UserInfo getUserInfo() {
+        return userService.getUserInfo();
+    }
     
 }

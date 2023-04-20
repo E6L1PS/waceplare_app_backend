@@ -16,6 +16,9 @@ public interface FavoriteAdRepository extends JpaRepository<FavoriteAd, Long> {
     @Query("SELECT fa.ad FROM FavoriteAd fa WHERE fa.user.id = :userId")
     List<Ad> findAdsByUserId(Long userId);
 
+    @Query("SELECT fa.ad.id FROM FavoriteAd fa WHERE fa.user.id = :userId")
+    List<Long> findAdsIdByUserId(Long userId);
+
     @Modifying
     @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.id = :adId")
     void deleteByUserIdAndByAdId(Long userId, Long adId);

@@ -1,6 +1,7 @@
 package com.itacademy.waceplare.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,6 +42,10 @@ public class User implements UserDetails {
     private String number;
 
     private Integer rating;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "date_of_created")
+    private LocalDate dateOfCreated;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "author")
@@ -89,13 +95,11 @@ public class User implements UserDetails {
         return true;
     }
 
- /*   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserCredentials credentials;*/
-
     @PrePersist
     private void init() {
         number = null;
-        rating = null;
+        dateOfCreated = LocalDate.now();
+        rating = 0;
         comments = null;
         advertisements = null;
         favoriteAds = null;
