@@ -1,7 +1,6 @@
 package com.itacademy.waceplare.service;
 
 import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.model.User;
 
 import java.util.List;
 
@@ -16,5 +15,8 @@ public interface IFavoriteAdService {
 
     void deleteByAdId(Long adId);
 
+    void deleteFavorites();
+
+    void deleteInactiveFavorites();
 
 }

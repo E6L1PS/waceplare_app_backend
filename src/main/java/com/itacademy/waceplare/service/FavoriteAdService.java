@@ -66,4 +66,18 @@ public class FavoriteAdService implements IFavoriteAdService {
         favoriteAdRepository.deleteByUserIdAndByAdId(userId, adId);
     }
 
+    @Override
+    @Transactional
+    public void deleteFavorites() {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        favoriteAdRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteInactiveFavorites() {
+        Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        favoriteAdRepository.deleteAllInactiveByUserId(userId);
+    }
+
 }

@@ -45,4 +45,15 @@ public class FavoriteAdController {
         favoriteAdService.deleteByAdId(adId);
     }
 
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @DeleteMapping
+    public void deleteFavorites() {
+        favoriteAdService.deleteFavorites();
+    }
+
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @DeleteMapping("inactive")
+    public void deleteInactiveFavorites() {
+        favoriteAdService.deleteInactiveFavorites();
+    }
 }

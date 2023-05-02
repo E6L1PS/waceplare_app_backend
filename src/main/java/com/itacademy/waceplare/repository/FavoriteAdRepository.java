@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,4 +23,15 @@ public interface FavoriteAdRepository extends JpaRepository<FavoriteAd, Long> {
     @Modifying
     @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.id = :adId")
     void deleteByUserIdAndByAdId(Long userId, Long adId);
+
+
+    @Modifying
+    @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId")
+    void deleteAllByUserId(Long userId);
+
+
+    @Modifying
+    @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.status = false")
+    void deleteAllInactiveByUserId(Long userId);
+
 }
