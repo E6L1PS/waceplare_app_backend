@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdImageRepository extends JpaRepository<AdImage, Long> {
 
-    @Query("SELECT a.url FROM AdImage a WHERE a.ad.id = :adId")
+    @Query("SELECT a.url FROM AdImage a WHERE a.ad.id = :adId AND a.isReviewImage = true")
     String findUrlByAdId(Long adId);
 }

@@ -52,23 +52,31 @@ public class AdController {
         adService.postAd(adDto);
     }
 
-    @PreAuthorize("hasRole(Role.USER.name())")
+   // @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping("/{adId}/images")
-    public void uploadImages(@PathVariable Long adId, @RequestParam("images") List<MultipartFile> images) {
+    public void uploadImages(@PathVariable Long adId, @RequestParam("files") List<MultipartFile> files) {
         try {
-            adService.uploadImages(adId, images);
+            adService.uploadImages(adId, files);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @GetMapping("/{adId}/image")
-    public byte[] getImage(@PathVariable Long adId) throws IOException {
+    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
         String url = adImageRepository.findUrlByAdId(adId);
         File file = ResourceUtils.getFile(url);
         InputStream in = new FileInputStream(file);
         return Files.readAllBytes(file.toPath());
     }
+
+    @GetMapping("/image")
+    public byte[] getImage(@RequestParam("url") String url) throws IOException {
+        File file = ResourceUtils.getFile(url);
+        InputStream in = new FileInputStream(file);
+        return Files.readAllBytes(file.toPath());
+    }
+
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @DeleteMapping("/{adId}")

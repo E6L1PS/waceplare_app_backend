@@ -101,10 +101,18 @@ public class AdService implements IAdService {
 
             List<AdImage> adImages = new ArrayList<>();
 
+            boolean isFirstElement = true;
             for (String imagePath : imagePaths) {
                 AdImage adImage = new AdImage();
                 adImage.setUrl(imagePath);
                 adImage.setAd(optionalAd.get());
+
+                if (isFirstElement) {
+                    adImage.setIsReviewImage(true);
+                    isFirstElement = false;
+                } else {
+                    adImage.setIsReviewImage(false);
+                }
                 adImages.add(adImage);
             }
             adImageRepository.saveAll(adImages);

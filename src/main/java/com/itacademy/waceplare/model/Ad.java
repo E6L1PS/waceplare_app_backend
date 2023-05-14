@@ -56,7 +56,7 @@ public class Ad {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<FavoriteAd> favoriteAds;
 
-    @JsonIgnore
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<AdImage> images;
 /*
