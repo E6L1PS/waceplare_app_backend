@@ -3,11 +3,12 @@ package com.itacademy.waceplare.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.itacademy.waceplare.dto.UserInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +28,8 @@ public class Ad {
 
     private Integer views;
 
+    private Integer favorites;
+
     private String title;
 
     @Column(length = 3000)
@@ -43,6 +46,8 @@ public class Ad {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Transient
+    private UserInfo userInfo;
     @Enumerated(EnumType.STRING)
     private TypeAd type;
 
@@ -56,12 +61,8 @@ public class Ad {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<FavoriteAd> favoriteAds;
 
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
     private List<AdImage> images;
-/*
-    @Transient
-    private List<MultipartFile> images;*/
 
     public Ad(Integer price, String title, String description, TypeAd type, StateAd state, User user) {
         this.price = price;
@@ -77,6 +78,7 @@ public class Ad {
         dateOfCreated = LocalDate.now();
         status = true;
         views = 0;
+        favorites = 0;
     }
 
 

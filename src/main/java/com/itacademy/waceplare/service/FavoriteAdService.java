@@ -51,7 +51,7 @@ public class FavoriteAdService implements IFavoriteAdService {
 
         if (optionalAd.isPresent()) {
             Ad ad = optionalAd.get();
-
+            adRepository.incrementFavoriteCount(adId);
             favoriteAdRepository.save(new FavoriteAd(user, ad));
         } else {
             throw new UserNotFoundException("Ad with id " + adId + " not found");
@@ -63,6 +63,7 @@ public class FavoriteAdService implements IFavoriteAdService {
     @Transactional
     public void deleteByAdId(Long adId) {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        adRepository.decrementFavoriteCount(adId);
         favoriteAdRepository.deleteByUserIdAndByAdId(userId, adId);
     }
 

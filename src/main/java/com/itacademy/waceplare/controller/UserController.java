@@ -18,7 +18,6 @@ public class UserController {
 
     private final IUserService userService;
 
-
     @GetMapping("/all")
     private List<User> getUsers() {
         return userService.getAll();

@@ -34,11 +34,14 @@ public class User implements UserDetails {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(length = 20)
     private String number;
 
     private Integer rating;
@@ -97,7 +100,6 @@ public class User implements UserDetails {
 
     @PrePersist
     private void init() {
-        number = null;
         dateOfCreated = LocalDate.now();
         rating = 0;
         comments = null;

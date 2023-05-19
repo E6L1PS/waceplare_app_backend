@@ -48,11 +48,11 @@ public class AdController {
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
-    public void postAd(@RequestBody AdDTO adDto) {
-        adService.postAd(adDto);
+    public Long postAd(@RequestBody AdDTO adDto) {
+        return adService.postAd(adDto);
     }
 
-   // @PreAuthorize("hasRole(Role.USER.name())")
+    @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping("/{adId}/images")
     public void uploadImages(@PathVariable Long adId, @RequestParam("files") List<MultipartFile> files) {
         try {

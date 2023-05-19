@@ -29,9 +29,8 @@ public interface FavoriteAdRepository extends JpaRepository<FavoriteAd, Long> {
     @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId")
     void deleteAllByUserId(Long userId);
 
-
     @Modifying
-    @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.status = false")
+    @Query("DELETE FROM FavoriteAd fa WHERE fa.user.id = :userId AND fa.ad.id IN (SELECT ad.id FROM Ad ad WHERE ad.status = false)")
     void deleteAllInactiveByUserId(Long userId);
 
 }

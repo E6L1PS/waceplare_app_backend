@@ -1,6 +1,7 @@
 package com.itacademy.waceplare.service;
 
 import com.itacademy.waceplare.dto.AdDTO;
+import com.itacademy.waceplare.dto.UserInfo;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.AdImage;
 import com.itacademy.waceplare.model.User;
@@ -66,7 +67,7 @@ public class AdService implements IAdService {
 
     @Override
     @Transactional
-    public void postAd(AdDTO adDTO) {
+    public Long postAd(AdDTO adDTO) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         log.info(user.getId());
         Ad ad = new Ad(
@@ -78,8 +79,7 @@ public class AdService implements IAdService {
                 user
         );
 
-        adRepository.save(ad);
-
+        return adRepository.save(ad).getId();
     }
 
     @Override
@@ -131,22 +131,83 @@ public class AdService implements IAdService {
     @Transactional
     public void hideAd(Long adId) {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        adRepository.updateAdStatusByUser(adId,userId, false);
+        adRepository.updateAdStatusByUser(adId, userId, false);
     }
 
     @Override
     @Transactional
     public void showAd(Long adId) {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        adRepository.updateAdStatusByUser(adId,userId, true);
+        adRepository.updateAdStatusByUser(adId, userId, true);
     }
 
     @Override
     @Transactional
     public Ad getAdById(Long adId) {
         adRepository.incrementViewCount(adId);
-        Optional<Ad> ad = adRepository.findById(adId);
-        return ad.orElse(null);
+        Optional<Ad> optionalAd = adRepository.findById(adId);
+        if (optionalAd.isPresent()) {
+            Ad ad = optionalAd.get();
+            User user = ad.getUser();
+            UserInfo userInfo = UserInfo.builder()
+                    .id(user.getId())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
+                    .number(user.getNumber())
+                    .rating(user.getRating())
+                    .dateOfCreated(user.getDateOfCreated())
+                    .build();
+            ad.setUserInfo(userInfo);
+            return ad;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void postAdWithImages(AdDTO adDto, List<MultipartFile> files) throws IOException {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        log.info(user.getId());
+        Ad ad = new Ad(
+                adDto.getPrice(),
+                adDto.getTitle(),
+                adDto.getDescription(),
+                adDto.getType(),
+                adDto.getState(),
+                user
+        );
+
+        Ad savedAd = adRepository.save(ad);
+        List<String> imagePaths = new ArrayList<>();
+
+        for (MultipartFile image : files) {
+            if (image.getContentType().startsWith("image/")) {
+                String imagePath = saveImage(savedAd.getId(), image); // Сохраняем изображение на сервере и получаем путь к нему
+                imagePaths.add(imagePath);
+            } else {
+                throw new UnsupportedMediaTypeStatusException("File type is not supported.");
+            }
+        }
+
+        List<AdImage> adImages = new ArrayList<>();
+
+        boolean isFirstElement = true;
+        for (String imagePath : imagePaths) {
+            AdImage adImage = new AdImage();
+            adImage.setUrl(imagePath);
+            adImage.setAd(savedAd);
+
+            if (isFirstElement) {
+                adImage.setIsReviewImage(true);
+                isFirstElement = false;
+            } else {
+                adImage.setIsReviewImage(false);
+            }
+            adImages.add(adImage);
+        }
+        adImageRepository.saveAll(adImages);
     }
 
     private String saveImage(Long adId, MultipartFile image) throws IOException {

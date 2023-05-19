@@ -14,7 +14,7 @@ public interface IAdService {
 
     List<Ad> getAdsByUser();
 
-    void postAd(AdDTO adDTO);
+    Long postAd(AdDTO adDTO);
 
     void uploadImages(Long adId, List<MultipartFile> images) throws IOException;
 

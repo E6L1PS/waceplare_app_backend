@@ -1,15 +1,9 @@
 package com.itacademy.waceplare.controller;
 
-import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.dto.UserInfo;
-import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.model.Comment;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -62,7 +55,7 @@ public class TestController {
                 Path path = Paths.get("D:\\Images", file.getOriginalFilename());
 
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-               // Files.write(path, file.getBytes());
+                // Files.write(path, file.getBytes());
             }
         } catch (IOException e) {
             e.printStackTrace();

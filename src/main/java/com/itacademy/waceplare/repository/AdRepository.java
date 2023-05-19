@@ -26,6 +26,14 @@ public interface AdRepository extends JpaRepository<Ad, Long> {
     void incrementViewCount(Long adId);
 
     @Modifying
+    @Query("UPDATE Ad a SET a.favorites = a.favorites + 1 WHERE a.id = :adId")
+    void incrementFavoriteCount(Long adId);
+
+    @Modifying
+    @Query("UPDATE Ad a SET a.favorites = a.favorites - 1 WHERE a.id = :adId")
+    void decrementFavoriteCount(Long adId);
+
+    @Modifying
     @Query("UPDATE Ad a SET a.status = :status WHERE a.user.id = :userId AND a.id = :adId")
     void updateAdStatusByUser(Long adId, Long userId, Boolean status);
 
