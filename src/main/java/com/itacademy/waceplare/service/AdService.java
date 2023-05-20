@@ -124,6 +124,7 @@ public class AdService implements IAdService {
     @Transactional
     public void deleteAd(Long adId) {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        adImageRepository.deleteAllAdByAd(adId);
         adRepository.deleteAdByUserId(adId, userId);
     }
 
@@ -163,51 +164,6 @@ public class AdService implements IAdService {
         } else {
             return null;
         }
-    }
-
-    @Override
-    @Transactional
-    public void postAdWithImages(AdDTO adDto, List<MultipartFile> files) throws IOException {
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        log.info(user.getId());
-        Ad ad = new Ad(
-                adDto.getPrice(),
-                adDto.getTitle(),
-                adDto.getDescription(),
-                adDto.getType(),
-                adDto.getState(),
-                user
-        );
-
-        Ad savedAd = adRepository.save(ad);
-        List<String> imagePaths = new ArrayList<>();
-
-        for (MultipartFile image : files) {
-            if (image.getContentType().startsWith("image/")) {
-                String imagePath = saveImage(savedAd.getId(), image); // Сохраняем изображение на сервере и получаем путь к нему
-                imagePaths.add(imagePath);
-            } else {
-                throw new UnsupportedMediaTypeStatusException("File type is not supported.");
-            }
-        }
-
-        List<AdImage> adImages = new ArrayList<>();
-
-        boolean isFirstElement = true;
-        for (String imagePath : imagePaths) {
-            AdImage adImage = new AdImage();
-            adImage.setUrl(imagePath);
-            adImage.setAd(savedAd);
-
-            if (isFirstElement) {
-                adImage.setIsReviewImage(true);
-                isFirstElement = false;
-            } else {
-                adImage.setIsReviewImage(false);
-            }
-            adImages.add(adImage);
-        }
-        adImageRepository.saveAll(adImages);
     }
 
     private String saveImage(Long adId, MultipartFile image) throws IOException {
