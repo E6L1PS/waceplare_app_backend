@@ -1,13 +1,15 @@
 package com.itacademy.waceplare.controller;
 
 import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.service.IFavoriteAdService;
+import com.itacademy.waceplare.service.interfaces.IFavoriteAdService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/favorites")
 @RequiredArgsConstructor

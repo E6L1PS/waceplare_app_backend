@@ -11,5 +11,8 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+server:
+  error:
+    include-message: always
 upload:
   path: E:/Images/

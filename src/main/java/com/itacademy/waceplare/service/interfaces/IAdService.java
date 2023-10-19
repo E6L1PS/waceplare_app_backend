@@ -1,4 +1,4 @@
-package com.itacademy.waceplare.service;
+package com.itacademy.waceplare.service.interfaces;
 
 import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.model.Ad;
@@ -14,7 +14,7 @@ public interface IAdService {
 
     List<Ad> getAdsByUser();
 
-    Long postAd(AdDTO adDTO);
+    Long postAd(Ad ad);
 
     void uploadImages(Long adId, List<MultipartFile> images) throws IOException;
 

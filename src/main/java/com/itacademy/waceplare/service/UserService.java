@@ -3,15 +3,16 @@ package com.itacademy.waceplare.service;
 import com.itacademy.waceplare.dto.UserInfo;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.UserRepository;
+import com.itacademy.waceplare.service.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Log4j2
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

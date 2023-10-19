@@ -1,9 +1,11 @@
 package com.itacademy.waceplare.auth;
 
+import com.itacademy.waceplare.exception.UserNotFoundException;
 import com.itacademy.waceplare.model.Role;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.UserRepository;
 import com.itacademy.waceplare.security.JwtService;
+import com.itacademy.waceplare.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,8 +23,11 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ValidationUtils validationUtils;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        validationUtils.validationRequest(request);
+
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -32,6 +37,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -45,8 +51,9 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-    /*    var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new Exception("Student not found - " + request.getEmail()));*/
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(""));
+
         var jwtToken = jwtService.generateToken((User) authentication.getPrincipal());
         return AuthenticationResponse.builder()
                 .token(jwtToken)

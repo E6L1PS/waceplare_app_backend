@@ -1,29 +1,31 @@
 package com.itacademy.waceplare.controller;
 
 import com.itacademy.waceplare.dto.AdDTO;
+import com.itacademy.waceplare.mapper.AdMapper;
 import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.repository.AdImageRepository;
-import com.itacademy.waceplare.service.IAdService;
+import com.itacademy.waceplare.model.User;
+import com.itacademy.waceplare.service.interfaces.IAdImageService;
+import com.itacademy.waceplare.service.interfaces.IAdService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.ResourceUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/ads")
 @RequiredArgsConstructor
 public class AdController {
 
     private final IAdService adService;
-    private final AdImageRepository adImageRepository;
+
+    private final IAdImageService adImageService;
+    private final AdMapper adMapper;
 
     @GetMapping
     public List<Ad> getAds() {
@@ -49,32 +51,11 @@ public class AdController {
     @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
     public Long postAd(@RequestBody AdDTO adDto) {
-        return adService.postAd(adDto);
-    }
-
-    @PreAuthorize("hasRole(Role.USER.name())")
-    @PostMapping("/{adId}/images")
-    public void uploadImages(@PathVariable Long adId, @RequestParam("files") List<MultipartFile> files) {
-        try {
-            adService.uploadImages(adId, files);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping("/{adId}/image")
-    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
-        String url = adImageRepository.findUrlByAdId(adId);
-        File file = ResourceUtils.getFile(url);
-        InputStream in = new FileInputStream(file);
-        return Files.readAllBytes(file.toPath());
-    }
-
-    @GetMapping("/image")
-    public byte[] getImage(@RequestParam("url") String url) throws IOException {
-        File file = ResourceUtils.getFile(url);
-        InputStream in = new FileInputStream(file);
-        return Files.readAllBytes(file.toPath());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("UserId: " + user.getId());
+        Ad ad = adMapper.toAd(adDto);
+        ad.setUser(user);
+        return adService.postAd(ad);
     }
 
 
@@ -96,5 +77,35 @@ public class AdController {
         adService.showAd(adId);
     }
 
+    @PreAuthorize("hasRole(Role.USER.name())")
+    @PostMapping("/{adId}/images")
+    public void uploadImages(@PathVariable Long adId, @RequestParam("files") List<MultipartFile> files) {
+        try {
+            adService.uploadImages(adId, files);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @GetMapping("/{adId}/image")
+    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
+        return adImageService.getReviewImage(adId);
+    }
+
+    @GetMapping("/image")
+    public byte[] getImage(@RequestParam("url") String url) throws IOException {
+        return adImageService.getImageByUrl(url);
+    }
+
+
+/*    public void getReviewImage(@PathVariable Long adId, HttpServletResponse httpServletResponse) throws IOException {
+
+        String url = adImageRepository.findUrlByAdId(adId);
+        File file = ResourceUtils.getFile(url);
+        InputStream in = new FileInputStream(file);
+        httpServletResponse.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(in, httpServletResponse.getOutputStream());
+    }*/
 
 }

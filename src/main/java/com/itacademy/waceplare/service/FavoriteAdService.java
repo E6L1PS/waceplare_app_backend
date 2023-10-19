@@ -1,13 +1,14 @@
 package com.itacademy.waceplare.service;
 
-import com.itacademy.waceplare.exception.UserNotFoundException;
+import com.itacademy.waceplare.exception.AdNotFoundException;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.FavoriteAd;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.FavoriteAdRepository;
+import com.itacademy.waceplare.service.interfaces.IFavoriteAdService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Log4j2
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -54,7 +55,7 @@ public class FavoriteAdService implements IFavoriteAdService {
             adRepository.incrementFavoriteCount(adId);
             favoriteAdRepository.save(new FavoriteAd(user, ad));
         } else {
-            throw new UserNotFoundException("Ad with id " + adId + " not found");
+            throw new AdNotFoundException("Ad with id " + adId + " not found");
         }
 
     }

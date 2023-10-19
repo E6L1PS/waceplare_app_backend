@@ -1,14 +1,14 @@
 package com.itacademy.waceplare.service;
 
-import com.itacademy.waceplare.dto.AdDTO;
 import com.itacademy.waceplare.dto.UserInfo;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.AdImage;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdImageRepository;
 import com.itacademy.waceplare.repository.AdRepository;
+import com.itacademy.waceplare.service.interfaces.IAdService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Log4j2
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -51,34 +51,12 @@ public class AdService implements IAdService {
     @Override
     public List<Ad> getAdsByUser() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-   /*     // загрузить изображения из папки пользователя
-        File imagesFolder = new File("images/" + user.getId());
-        File[] imageFiles = imagesFolder.listFiles();
-        List<byte[]> images = new ArrayList<>();
-        for (File imageFile : imageFiles) {
-            BufferedImage image = ImageIO.read(imageFile);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", baos);
-            images.add(baos.toByteArray());
-        }*/
         return adRepository.findByUser(user);
     }
 
     @Override
     @Transactional
-    public Long postAd(AdDTO adDTO) {
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        log.info(user.getId());
-        Ad ad = new Ad(
-                adDTO.getPrice(),
-                adDTO.getTitle(),
-                adDTO.getDescription(),
-                adDTO.getType(),
-                adDTO.getState(),
-                user
-        );
-
+    public Long postAd(Ad ad) {
         return adRepository.save(ad).getId();
     }
 
@@ -124,7 +102,7 @@ public class AdService implements IAdService {
     @Transactional
     public void deleteAd(Long adId) {
         Long userId = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        adImageRepository.deleteAllAdByAd(adId);
+        adImageRepository.deleteAllImageUrlsByAdId(adId);
         adRepository.deleteAdByUserId(adId, userId);
     }
 
@@ -167,7 +145,7 @@ public class AdService implements IAdService {
     }
 
     private String saveImage(Long adId, MultipartFile image) throws IOException {
-        String imageName = UUID.randomUUID().toString() + "-" + image.getOriginalFilename();
+        String imageName = UUID.randomUUID() + "-" + image.getOriginalFilename();
         Path adDirPath = Paths.get(uploadPath, adId.toString());
 
         if (!Files.exists(adDirPath)) {

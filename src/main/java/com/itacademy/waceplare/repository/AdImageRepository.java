@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface AdImageRepository extends JpaRepository<AdImage, Long> {
 
     @Query("SELECT a.url FROM AdImage a WHERE a.ad.id = :adId AND a.isReviewImage = true")
-    String findUrlByAdId(Long adId);
+    String findReviewImageUrlByAdId(Long adId);
 
     @Modifying
     @Query("DELETE FROM AdImage a  WHERE a.ad.id = :adId")
-    void deleteAllAdByAd(Long adId);
+    void deleteAllImageUrlsByAdId(Long adId);
 }

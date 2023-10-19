@@ -1,4 +1,4 @@
-package com.itacademy.waceplare.service;
+package com.itacademy.waceplare.service.interfaces;
 
 import com.itacademy.waceplare.model.Ad;
 

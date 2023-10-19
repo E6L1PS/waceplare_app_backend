@@ -37,10 +37,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @Column(length = 20)
     private String number;
 
@@ -51,13 +47,16 @@ public class User implements UserDetails {
     private LocalDate dateOfCreated;
 
     @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "author")
     private List<Comment> comments;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Ad> advertisements;
-
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
