@@ -23,7 +23,6 @@ import java.util.List;
 public class AdController {
 
     private final IAdService adService;
-
     private final IAdImageService adImageService;
     private final AdMapper adMapper;
 

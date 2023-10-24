@@ -1,6 +1,7 @@
 package com.itacademy.waceplare.service;
 
 import com.itacademy.waceplare.dto.UserInfo;
+import com.itacademy.waceplare.exception.AdNotFoundException;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.AdImage;
 import com.itacademy.waceplare.model.User;
@@ -21,10 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -50,7 +48,7 @@ public class AdService implements IAdService {
 
     @Override
     public List<Ad> getAdsByUser() {
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return adRepository.findByUser(user);
     }
 
@@ -69,7 +67,7 @@ public class AdService implements IAdService {
             List<String> imagePaths = new ArrayList<>();
 
             for (MultipartFile image : images) {
-                if (image.getContentType().startsWith("image/")) {
+                if (Objects.requireNonNull(image.getContentType()).startsWith("image/")) {
                     String imagePath = saveImage(adId, image); // Сохраняем изображение на сервере и получаем путь к нему
                     imagePaths.add(imagePath);
                 } else {
@@ -94,6 +92,8 @@ public class AdService implements IAdService {
                 adImages.add(adImage);
             }
             adImageRepository.saveAll(adImages);
+        } else {
+            throw new AdNotFoundException("Ad with id " + adId + " not found");
         }
     }
 
@@ -140,7 +140,7 @@ public class AdService implements IAdService {
             ad.setUserInfo(userInfo);
             return ad;
         } else {
-            return null;
+            throw new AdNotFoundException("Ad with id " + adId + " not found");
         }
     }
 

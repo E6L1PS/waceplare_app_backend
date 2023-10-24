@@ -35,6 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String userEmail;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
+
             return;
         }
         jwt = authHeader.substring(7);
@@ -53,6 +54,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                throw new UnauthorizedException("Unauthorized"); // Throw the exception if token is invalid
             }
         }
 

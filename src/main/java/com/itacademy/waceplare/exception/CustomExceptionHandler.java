@@ -1,7 +1,11 @@
 package com.itacademy.waceplare.exception;
 
+import com.itacademy.waceplare.security.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,5 +44,18 @@ public class CustomExceptionHandler {
         return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseError handleAuthenticationException(AuthenticationException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError("Unauthorized. You need to be authenticated to access this resource.", HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseError handleAuthenticationException(AccessDeniedException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
@@ -24,7 +26,7 @@ public class Comment {
     @Column(nullable = false)
     private String text;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
     private LocalDateTime date;
 
@@ -33,8 +35,7 @@ public class Comment {
     @JoinColumn(name = "ad_id", nullable = false, updatable = false)
     private Ad ad;
 
-    @JsonIgnore()
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
 

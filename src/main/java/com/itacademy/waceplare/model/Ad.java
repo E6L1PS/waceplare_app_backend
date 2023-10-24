@@ -3,10 +3,10 @@ package com.itacademy.waceplare.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.itacademy.waceplare.dto.UserInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "ads")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 public class Ad {
 
@@ -80,6 +81,4 @@ public class Ad {
         views = 0;
         favorites = 0;
     }
-
-
 }

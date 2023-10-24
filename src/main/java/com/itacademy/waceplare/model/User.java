@@ -4,10 +4,8 @@ package com.itacademy.waceplare.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -52,10 +51,12 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "author")
+    @ToString.Exclude
     private List<Comment> comments;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @ToString.Exclude
     private List<Ad> advertisements;
 
     @JsonIgnore
@@ -107,4 +108,20 @@ public class User implements UserDetails {
 
     }
 
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ",\n firstname='" + firstname + '\'' +
+                ",\n lastname='" + lastname + '\'' +
+                ",\n email='" + email + '\'' +
+                ",\n password='" + password + '\'' +
+                ",\n number='" + number + '\'' +
+                ",\n rating=" + rating +
+                ",\n dateOfCreated=" + dateOfCreated +
+                ",\n role=" + role +
+                '}';
+    }
 }

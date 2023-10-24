@@ -17,6 +17,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,6 +27,7 @@ public class SecurityConfig {
                             "/api/v1/auth/authenticate",
                             "/api/v1/auth/register",
                             "/api/v1/ads/**",
+                            "/api/v1/comments/**",
                             "/api/v1/upload/**",
 
                             //for Swagger:
