@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -39,7 +37,7 @@ public class User implements UserDetails {
     @Column(length = 20)
     private String number;
 
-    private Integer rating;
+    private Double rating;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "date_of_created")
@@ -101,27 +99,10 @@ public class User implements UserDetails {
     @PrePersist
     private void init() {
         dateOfCreated = LocalDate.now();
-        rating = 0;
+        rating = null;
         comments = null;
         advertisements = null;
         favoriteAds = null;
 
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ",\n firstname='" + firstname + '\'' +
-                ",\n lastname='" + lastname + '\'' +
-                ",\n email='" + email + '\'' +
-                ",\n password='" + password + '\'' +
-                ",\n number='" + number + '\'' +
-                ",\n rating=" + rating +
-                ",\n dateOfCreated=" + dateOfCreated +
-                ",\n role=" + role +
-                '}';
     }
 }

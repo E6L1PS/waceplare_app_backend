@@ -13,6 +13,6 @@ public class UserInfo {
     private String lastname;
     private String email;
     private String number;
-    private Integer rating;
+    private Double rating;
     private LocalDate dateOfCreated;
 }

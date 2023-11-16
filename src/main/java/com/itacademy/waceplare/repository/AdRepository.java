@@ -3,23 +3,22 @@ package com.itacademy.waceplare.repository;
 
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Long> {
 
-    List<Ad> findByStatusTrue();
-
-    List<Ad> findByUser(User user);
+    Page<Ad> findByStatusTrue(PageRequest pageRequest);
 
     @Query("SELECT a FROM Ad a WHERE a.status=true AND a.title ILIKE %:title%")
-    List<Ad> findByStatusTrueAndTitle(String title);
+    Page<Ad> findByStatusTrueAndTitle(String title, PageRequest pageRequest);
+
+    Page<Ad> findByUser(User user, PageRequest pageRequest);
 
     @Modifying
     @Query("UPDATE Ad a SET a.views = a.views + 1 WHERE a.id = :adId")

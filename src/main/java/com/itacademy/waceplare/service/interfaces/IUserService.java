@@ -11,4 +11,5 @@ public interface IUserService {
 
     UserInfo getUserInfo();
 
+    void rateUser(Long userId, Integer newRating);
 }

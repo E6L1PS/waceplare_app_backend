@@ -35,7 +35,9 @@ public class Comment {
     @JoinColumn(name = "ad_id", nullable = false, updatable = false)
     private Ad ad;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+
+    @JsonIgnore()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
 

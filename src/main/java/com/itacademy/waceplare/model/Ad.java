@@ -73,7 +73,6 @@ public class Ad {
         this.state = state;
         this.user = user;
     }
-
     @PrePersist
     private void init() {
         dateOfCreated = LocalDate.now();

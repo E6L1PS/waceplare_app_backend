@@ -3,6 +3,7 @@ package com.itacademy.waceplare.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "ad_images")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 public class AdImage {
     @Id

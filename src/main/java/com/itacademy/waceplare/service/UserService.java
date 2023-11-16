@@ -40,4 +40,22 @@ public class UserService implements IUserService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public void rateUser(Long userId, Integer newRating) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Double rating = userRepository.findRatingById(userId);
+        if (rating == null) {
+            userRepository.updateRatingById(userId, Double.valueOf(newRating));
+        } else {
+            if (newRating >= 0 && newRating <= 5) {
+                rating = (rating + newRating) / 2;
+                userRepository.updateRatingById(userId, rating);
+            } else {
+                throw new IllegalArgumentException("Новый рейтинг должен быть в диапазоне от 0 до 5");
+            }
+        }
+    }
+
+
 }

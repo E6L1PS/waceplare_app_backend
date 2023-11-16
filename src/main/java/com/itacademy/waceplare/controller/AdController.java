@@ -8,6 +8,9 @@ import com.itacademy.waceplare.service.interfaces.IAdImageService;
 import com.itacademy.waceplare.service.interfaces.IAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -27,19 +30,28 @@ public class AdController {
     private final AdMapper adMapper;
 
     @GetMapping
-    public List<Ad> getAds() {
-        return adService.getAll();
+    public List<Ad> getAds(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+                @RequestParam(required = false, defaultValue = "10") Integer size) {
+        return adService.getAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     @GetMapping("/title")
-    public List<Ad> getAdsByTitle(@RequestParam("title") String title) {
-        return adService.getAllByTitle(title);
+    public List<Ad> getAdsByTitle(
+            @RequestParam("title") String title,
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size
+    ) {
+        return adService.getAllByTitle(title, PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @GetMapping("/my")
-    public List<Ad> getAdsByUser() {
-        return adService.getAdsByUser();
+    public List<Ad> getAdsByUser(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer size
+    ) {
+        return adService.getAdsByUser(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     @GetMapping("/{adId}")
@@ -49,6 +61,7 @@ public class AdController {
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Long postAd(@RequestBody AdDTO adDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("UserId: " + user.getId());
@@ -57,21 +70,23 @@ public class AdController {
         return adService.postAd(ad);
     }
 
-
     @PreAuthorize("hasRole(Role.USER.name())")
     @DeleteMapping("/{adId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAd(@PathVariable Long adId) {
         adService.deleteAd(adId);
     }
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @PutMapping("/my/{adId}/hide")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void hideAd(@PathVariable Long adId) {
         adService.hideAd(adId);
     }
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @PutMapping("/my/{adId}/show")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void showAd(@PathVariable Long adId) {
         adService.showAd(adId);
     }

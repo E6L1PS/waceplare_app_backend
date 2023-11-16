@@ -11,6 +11,8 @@ import com.itacademy.waceplare.service.interfaces.IAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,19 +39,22 @@ public class AdService implements IAdService {
     private final AdImageRepository adImageRepository;
 
     @Override
-    public List<Ad> getAll() {
-        return adRepository.findByStatusTrue();
+    public List<Ad> getAll(PageRequest pageRequest) {
+        Page<Ad> page = adRepository.findByStatusTrue(pageRequest);
+        return page.getContent();
     }
 
     @Override
-    public List<Ad> getAllByTitle(String title) {
-        return adRepository.findByStatusTrueAndTitle(title);
+    public List<Ad> getAllByTitle(String title, PageRequest pageRequest) {
+        Page<Ad> page = adRepository.findByStatusTrueAndTitle(title, pageRequest);
+        return page.getContent();
     }
 
     @Override
-    public List<Ad> getAdsByUser() {
+    public List<Ad> getAdsByUser(PageRequest pageRequest) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return adRepository.findByUser(user);
+        Page<Ad> page = adRepository.findByUser(user, pageRequest);
+        return page.getContent();
     }
 
     @Override
@@ -79,9 +84,10 @@ public class AdService implements IAdService {
 
             boolean isFirstElement = true;
             for (String imagePath : imagePaths) {
-                AdImage adImage = new AdImage();
-                adImage.setUrl(imagePath);
-                adImage.setAd(optionalAd.get());
+                AdImage adImage = AdImage.builder()
+                        .url(imagePath)
+                        .ad(optionalAd.get())
+                        .build();
 
                 if (isFirstElement) {
                     adImage.setIsReviewImage(true);
@@ -89,8 +95,10 @@ public class AdService implements IAdService {
                 } else {
                     adImage.setIsReviewImage(false);
                 }
+
                 adImages.add(adImage);
             }
+
             adImageRepository.saveAll(adImages);
         } else {
             throw new AdNotFoundException("Ad with id " + adId + " not found");
@@ -123,9 +131,9 @@ public class AdService implements IAdService {
     @Override
     @Transactional
     public Ad getAdById(Long adId) {
-        adRepository.incrementViewCount(adId);
         Optional<Ad> optionalAd = adRepository.findById(adId);
         if (optionalAd.isPresent()) {
+            adRepository.incrementViewCount(adId);
             Ad ad = optionalAd.get();
             User user = ad.getUser();
             UserInfo userInfo = UserInfo.builder()
