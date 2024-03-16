@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 public class CommentDto {
 
     private String text;
+
     private LocalDateTime date;
+
     private UserInfoDto author;
 
 }

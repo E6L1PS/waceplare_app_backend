@@ -32,4 +32,5 @@ public class RegisterRequestDto {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,}$",
             message = "Некоректный password")
     private String password;
+
 }

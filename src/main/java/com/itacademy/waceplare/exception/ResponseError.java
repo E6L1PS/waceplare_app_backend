@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ResponseError {
+
     private final String message;
+
     private final HttpStatus httpStatus;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -18,4 +20,5 @@ public class ResponseError {
         this.httpStatus = httpStatus;
         this.message = message;
     }
+
 }

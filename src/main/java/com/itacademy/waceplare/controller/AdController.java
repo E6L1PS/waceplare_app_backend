@@ -103,15 +103,15 @@ public class AdController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @GetMapping("/{adId}/image")
-//    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
-//        return adImageService.getReviewImage(adId);
-//    }
-//
-//    @GetMapping("/image")
-//    public byte[] getImage(@RequestParam("url") String url) throws IOException {
-//        return adImageService.getImageByUrl(url);
-//    }
+    @GetMapping(value = "/{adId}/image", consumes = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getReviewImage(@PathVariable Long adId) {
+        return adImageServiceTest.getReviewImage(adId);
+    }
+
+    @GetMapping(value = "/image", consumes = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImage(@RequestParam("id") String id) {
+        return adImageServiceTest.getImageById(id);
+    }
 
 
 /*    public void getReviewImage(@PathVariable Long adId, HttpServletResponse httpServletResponse) throws IOException {

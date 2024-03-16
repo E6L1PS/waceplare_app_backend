@@ -8,10 +8,15 @@ import lombok.Data;
 @Data
 @Builder
 public class AdDto {
+
     private Integer price;
+
     private String title;
+
     private String description;
+
     private TypeAd type;
+
     private StateAd state;
 
 }

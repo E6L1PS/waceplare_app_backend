@@ -4,11 +4,14 @@ import com.itacademy.waceplare.exception.AdNotFoundException;
 import com.itacademy.waceplare.exception.ImageUploadException;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.Image;
-import com.itacademy.waceplare.repository.ImageRepository;
 import com.itacademy.waceplare.repository.AdRepository;
+import com.itacademy.waceplare.repository.ImageRepository;
 import com.itacademy.waceplare.service.interfaces.ImageService;
+import io.minio.GetObjectArgs;
+import io.minio.GetObjectResponse;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.errors.MinioException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,15 +44,25 @@ public class ImageServiceImpl implements ImageService {
     private String bucketName;
 
     @Override
-    public byte[] getReviewImage(Long adId) throws IOException {
-        //TODO getReviewImage
-        return new byte[0];
+    public byte[] getReviewImage(Long adId) {
+        UUID id = imageRepository.findReviewImageByAdId(adId)
+                .orElseThrow(() ->
+                        new AdNotFoundException("Image with ad id " + adId + " not found.")//TODO not
+                ).getId();
+        return getImageById(String.valueOf(id));
     }
 
     @Override
-    public byte[] getImageByUrl(String url) throws IOException {
-        //TODO getImageByUrl
-        return new byte[0];
+    public byte[] getImageById(String id) {
+        try {
+            GetObjectResponse object = minioClient.getObject(GetObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(id)
+                    .build());
+            return object.readAllBytes();
+        } catch (MinioException | GeneralSecurityException | IOException e) {
+            throw new ImageUploadException(e.getMessage()); //TODO not found image by id
+        }
     }
 
     @Override
