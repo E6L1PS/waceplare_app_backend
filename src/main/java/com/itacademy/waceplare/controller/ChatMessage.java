@@ -1,14 +1,22 @@
-package com.itacademy.waceplare.auth;
+/*
+package com.itacademy.waceplare.controller;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-    private String token;
+public class ChatMessage {
+
+    private String content;
+    private String sender;
+    private MessageType type;
+
 }
+*/

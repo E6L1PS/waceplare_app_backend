@@ -1,5 +1,8 @@
-package com.itacademy.waceplare.auth;
+package com.itacademy.waceplare.service;
 
+import com.itacademy.waceplare.dto.AuthenticationRequestDto;
+import com.itacademy.waceplare.dto.AuthenticationResponseDto;
+import com.itacademy.waceplare.dto.RegisterRequestDto;
 import com.itacademy.waceplare.exception.UserNotFoundException;
 import com.itacademy.waceplare.model.Role;
 import com.itacademy.waceplare.model.User;
@@ -25,7 +28,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final ValidationUtils validationUtils;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponseDto register(RegisterRequestDto request) {
         validationUtils.validationRequest(request);
 
         var user = User.builder()
@@ -39,12 +42,12 @@ public class AuthenticationService {
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDto.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -55,7 +58,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UserNotFoundException(""));
 
         var jwtToken = jwtService.generateToken((User) authentication.getPrincipal());
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDto.builder()
                 .token(jwtToken)
                 .build();
     }

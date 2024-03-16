@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create favorite table
+      author: pesternikov.d.y.
+      changes:
+        - createTable:
+            tableName: t_favorite_ad
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_favorite_user
+                    references: t_user(id)
+              - column:
+                  name: ad_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_favorite_ad
+                    references: t_ad(id)

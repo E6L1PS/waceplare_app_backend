@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-public interface ICommentService {
+public interface CommentService {
 
     List<Comment> getCommentsByAdId(Long adId, PageRequest pageRequest);
 

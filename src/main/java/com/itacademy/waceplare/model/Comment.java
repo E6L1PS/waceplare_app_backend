@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "t_comment")
 @Data
 @Builder
 @AllArgsConstructor

@@ -3,7 +3,7 @@ package com.itacademy.waceplare.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.itacademy.waceplare.dto.UserInfo;
+import com.itacademy.waceplare.dto.UserInfoDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "ads")
+@Table(name = "t_ad")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -48,7 +48,7 @@ public class Ad {
     private User user;
 
     @Transient
-    private UserInfo userInfo;
+    private UserInfoDto userInfoDto;
     @Enumerated(EnumType.STRING)
     private TypeAd type;
 
@@ -63,7 +63,7 @@ public class Ad {
     private List<FavoriteAd> favoriteAds;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ad", orphanRemoval = true)
-    private List<AdImage> images;
+    private List<Image> images;
 
     public Ad(Integer price, String title, String description, TypeAd type, StateAd state, User user) {
         this.price = price;

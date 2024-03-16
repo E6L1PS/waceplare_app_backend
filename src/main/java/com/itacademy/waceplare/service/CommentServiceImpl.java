@@ -6,7 +6,7 @@ import com.itacademy.waceplare.model.Comment;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.CommentRepository;
-import com.itacademy.waceplare.service.interfaces.ICommentService;
+import com.itacademy.waceplare.service.interfaces.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CommentService implements ICommentService {
+public class CommentServiceImpl implements CommentService {
 
     public final CommentRepository commentRepository;
 

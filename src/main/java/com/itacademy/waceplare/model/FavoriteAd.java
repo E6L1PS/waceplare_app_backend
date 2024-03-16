@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "favorite_ads")
+@Table(name = "t_favorite_ad")
 @Data
 @Builder
 @AllArgsConstructor

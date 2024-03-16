@@ -1,5 +1,7 @@
-package com.itacademy.waceplare.security;
+package com.itacademy.waceplare.config;
 
+import com.itacademy.waceplare.security.JwtAuthFilter;
+import com.itacademy.waceplare.security.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

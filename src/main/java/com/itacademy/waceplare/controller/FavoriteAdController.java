@@ -1,7 +1,7 @@
 package com.itacademy.waceplare.controller;
 
 import com.itacademy.waceplare.model.Ad;
-import com.itacademy.waceplare.service.interfaces.IFavoriteAdService;
+import com.itacademy.waceplare.service.interfaces.FavoriteAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteAdController {
 
-    private final IFavoriteAdService favoriteAdService;
+    private final FavoriteAdService favoriteAdService;
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @GetMapping

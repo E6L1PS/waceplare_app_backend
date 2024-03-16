@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class CommentDTO {
+public class CommentDto {
 
     private String text;
     private LocalDateTime date;
-    private UserInfo author;
+    private UserInfoDto author;
 
 }

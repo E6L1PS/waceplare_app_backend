@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AdDTO {
+public class AdDto {
     private Integer price;
     private String title;
     private String description;

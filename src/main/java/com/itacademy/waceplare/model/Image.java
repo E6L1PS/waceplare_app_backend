@@ -7,18 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
-@Table(name = "ad_images")
+@Table(name = "t_image")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class AdImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Image {
 
-    private String url;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private Boolean isReviewImage;
 
@@ -26,4 +27,5 @@ public class AdImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id")
     private Ad ad;
+
 }

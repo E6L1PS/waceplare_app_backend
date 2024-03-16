@@ -4,7 +4,7 @@ import com.itacademy.waceplare.model.Ad;
 
 import java.util.List;
 
-public interface IFavoriteAdService {
+public interface FavoriteAdService {
     List<Ad> getAll();
 
     List<Long> getAdsId();

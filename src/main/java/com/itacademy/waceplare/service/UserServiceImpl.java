@@ -1,9 +1,9 @@
 package com.itacademy.waceplare.service;
 
-import com.itacademy.waceplare.dto.UserInfo;
+import com.itacademy.waceplare.dto.UserInfoDto;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.UserRepository;
-import com.itacademy.waceplare.service.interfaces.IUserService;
+import com.itacademy.waceplare.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -26,10 +26,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserInfo getUserInfo() {
+    public UserInfoDto getUserInfo() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        return UserInfo.builder()
+        return UserInfoDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .number(user.getNumber())

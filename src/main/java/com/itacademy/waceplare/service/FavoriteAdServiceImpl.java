@@ -6,7 +6,7 @@ import com.itacademy.waceplare.model.FavoriteAd;
 import com.itacademy.waceplare.model.User;
 import com.itacademy.waceplare.repository.AdRepository;
 import com.itacademy.waceplare.repository.FavoriteAdRepository;
-import com.itacademy.waceplare.service.interfaces.IFavoriteAdService;
+import com.itacademy.waceplare.service.interfaces.FavoriteAdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FavoriteAdService implements IFavoriteAdService {
+public class FavoriteAdServiceImpl implements FavoriteAdService {
 
     private final FavoriteAdRepository favoriteAdRepository;
     private final AdRepository adRepository;

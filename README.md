@@ -7,8 +7,10 @@
 + Spring Boot
 + Spring Web
 + Spring Data JPA
-+ PostgreSQL
 + Spring Security
++ Postgres
++ Liquibase
++ Minio
 + JUnit + Mockito
 
 ERD:![erd](src/main/resources/WaceplareERD.svg)

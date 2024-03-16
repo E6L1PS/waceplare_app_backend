@@ -1,9 +1,7 @@
 package com.itacademy.waceplare.exception;
 
-import com.itacademy.waceplare.security.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +28,7 @@ public class CustomExceptionHandler {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseError handleIOException(IOException exception) {
@@ -56,6 +55,13 @@ public class CustomExceptionHandler {
     public ResponseError handleAuthenticationException(AccessDeniedException exception) {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseError handleImageUploadException(ImageUploadException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }

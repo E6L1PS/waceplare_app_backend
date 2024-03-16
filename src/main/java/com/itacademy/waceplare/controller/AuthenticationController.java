@@ -1,5 +1,9 @@
-package com.itacademy.waceplare.auth;
+package com.itacademy.waceplare.controller;
 
+import com.itacademy.waceplare.service.AuthenticationService;
+import com.itacademy.waceplare.dto.RegisterRequestDto;
+import com.itacademy.waceplare.dto.AuthenticationRequestDto;
+import com.itacademy.waceplare.dto.AuthenticationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,15 +17,15 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+    public ResponseEntity<AuthenticationResponseDto> register(
+            @RequestBody RegisterRequestDto request
     ) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<AuthenticationResponseDto> authenticate(
+            @RequestBody AuthenticationRequestDto request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }

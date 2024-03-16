@@ -3,7 +3,7 @@ package com.itacademy.waceplare.service;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.Role;
 import com.itacademy.waceplare.model.User;
-import com.itacademy.waceplare.repository.AdImageRepository;
+import com.itacademy.waceplare.repository.ImageRepository;
 import com.itacademy.waceplare.repository.AdRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -30,10 +30,10 @@ class AdServiceTest {
     private AdRepository adRepository;
 
     @Mock
-    private AdImageRepository adImageRepository;
+    private ImageRepository imageRepository;
 
     @InjectMocks
-    private AdService adService;
+    private AdServiceImpl adService;
 
     private List<Ad> ads;
 

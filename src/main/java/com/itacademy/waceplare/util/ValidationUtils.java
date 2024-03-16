@@ -16,7 +16,6 @@ public class ValidationUtils {
     private final Validator validator;
 
     public <T> void validationRequest(T request) {
-
         if (request != null) {
             Set<ConstraintViolation<T>> result = validator.validate(request);
 

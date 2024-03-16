@@ -1,0 +1,119 @@
+databaseChangeLog:
+  - changeSet:
+      id: create tables
+      author: pesternikov.d.y.
+      changes:
+        - createTable:
+            tableName: t_user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: number
+                  type: varchar(20)
+              - column:
+                  name: lastname
+                  type: varchar(50)
+              - column:
+                  name: firstname
+                  type: varchar(50)
+              - column:
+                  name: email
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_created
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: double
+
+        - createTable:
+            tableName: t_ad
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(3000)
+              - column:
+                  name: type
+                  type: varchar(50)
+              - column:
+                  name: state
+                  type: varchar(50)
+              - column:
+                  name: date_of_created
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: currency
+              - column:
+                  name: views
+                  type: int
+              - column:
+                  name: favorites
+                  type: int
+              - column:
+                  name: status
+                  type: boolean
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ad_user
+                    references: t_user(id)
+
+        - createTable:
+            tableName: t_image
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_review_image
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ad_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_image_ad
+                    references: t_ad(id)

@@ -1,6 +1,5 @@
-package com.itacademy.waceplare.security;
+package com.itacademy.waceplare.config;
 
-import com.itacademy.waceplare.exception.UserNotFoundException;
 import com.itacademy.waceplare.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +42,5 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

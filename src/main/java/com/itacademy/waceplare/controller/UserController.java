@@ -1,8 +1,8 @@
 package com.itacademy.waceplare.controller;
 
-import com.itacademy.waceplare.dto.UserInfo;
+import com.itacademy.waceplare.dto.UserInfoDto;
 import com.itacademy.waceplare.model.User;
-import com.itacademy.waceplare.service.interfaces.IUserService;
+import com.itacademy.waceplare.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final IUserService userService;
+    private final UserService userService;
 
     @GetMapping("/all")
     private List<User> getUsers() {
@@ -25,7 +25,7 @@ public class UserController {
 
     @PreAuthorize("hasRole(Role.USER.name())")
     @GetMapping
-    private UserInfo getUserInfo() {
+    private UserInfoDto getUserInfo() {
         return userService.getUserInfo();
     }
 
@@ -34,4 +34,5 @@ public class UserController {
     private void rateUser(@PathVariable Long userId, @RequestParam Integer newRating) {
         userService.rateUser(userId, newRating);
     }
+
 }

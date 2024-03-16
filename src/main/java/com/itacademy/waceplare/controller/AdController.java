@@ -1,22 +1,23 @@
 package com.itacademy.waceplare.controller;
 
-import com.itacademy.waceplare.dto.AdDTO;
+import com.itacademy.waceplare.dto.AdDto;
 import com.itacademy.waceplare.mapper.AdMapper;
 import com.itacademy.waceplare.model.Ad;
 import com.itacademy.waceplare.model.User;
-import com.itacademy.waceplare.service.interfaces.IAdImageService;
-import com.itacademy.waceplare.service.interfaces.IAdService;
+import com.itacademy.waceplare.service.ImageServiceImpl;
+import com.itacademy.waceplare.service.interfaces.AdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -25,14 +26,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdController {
 
-    private final IAdService adService;
-    private final IAdImageService adImageService;
+    private final AdService adService;
+    //    private final AdImageServiceImpl adImageService;
+    private final ImageServiceImpl adImageServiceTest;
     private final AdMapper adMapper;
 
     @GetMapping
     public List<Ad> getAds(
             @RequestParam(required = false, defaultValue = "0") Integer page,
-                @RequestParam(required = false, defaultValue = "10") Integer size) {
+            @RequestParam(required = false, defaultValue = "10") Integer size) {
         return adService.getAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
@@ -62,10 +64,10 @@ public class AdController {
     @PreAuthorize("hasRole(Role.USER.name())")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long postAd(@RequestBody AdDTO adDto) {
+    public Long postAd(@RequestBody AdDto adDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("UserId: " + user.getId());
-        Ad ad = adMapper.toAd(adDto);
+        Ad ad = adMapper.toEntity(adDto);
         ad.setUser(user);
         return adService.postAd(ad);
     }
@@ -92,25 +94,24 @@ public class AdController {
     }
 
     @PreAuthorize("hasRole(Role.USER.name())")
-    @PostMapping("/{adId}/images")
-    public void uploadImages(@PathVariable Long adId, @RequestParam("files") List<MultipartFile> files) {
-        try {
-            adService.uploadImages(adId, files);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping(value = "/{adId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadImages(
+            @PathVariable Long adId,
+            @RequestPart List<MultipartFile> files
+    ) {
+        adImageServiceTest.uploadImages(adId, files);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-
-    @GetMapping("/{adId}/image")
-    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
-        return adImageService.getReviewImage(adId);
-    }
-
-    @GetMapping("/image")
-    public byte[] getImage(@RequestParam("url") String url) throws IOException {
-        return adImageService.getImageByUrl(url);
-    }
+//    @GetMapping("/{adId}/image")
+//    public byte[] getReviewImage(@PathVariable Long adId) throws IOException {
+//        return adImageService.getReviewImage(adId);
+//    }
+//
+//    @GetMapping("/image")
+//    public byte[] getImage(@RequestParam("url") String url) throws IOException {
+//        return adImageService.getImageByUrl(url);
+//    }
 
 
 /*    public void getReviewImage(@PathVariable Long adId, HttpServletResponse httpServletResponse) throws IOException {
